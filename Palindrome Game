@@ -1,0 +1,64 @@
+public class PalindromeGame {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int T = sc.nextInt(); // Number of test cases
+
+        // Read all test cases to determine the maximum S value
+        long[] testCases = new long[T];
+        long maxS = 0;
+        for (int i = 0; i < T; i++) {
+            testCases[i] = sc.nextLong();
+            maxS = Math.max(maxS, testCases[i]);
+        }
+        sc.close();
+        // Generate all palindromic numbers up to maxS
+        List<Integer> palindromes = generatePalindromes((int) Math.min(maxS, Integer.MAX_VALUE));
+
+        // Compute results using dynamic programming
+        String[] results = new String[(int) Math.min(maxS + 1, Integer.MAX_VALUE)];
+        results[0] = "E"; // Base case: if the pile is empty, Elsie wins
+        for (int i = 1; i <= maxS; i++) {
+            results[i] = "E"; // Assume Elsie wins by default
+            for (int p : palindromes) {
+                if (p > i) break;
+                if (results[i - p].equals("E")) {
+                    results[i] = "B";
+                    break;
+                }
+            }
+        }
+
+        // Output results for each test case
+        StringBuilder output = new StringBuilder();
+        for (long s : testCases) {
+            output.append(results[(int) s]).append("\n");
+        }
+        System.out.print(output);
+    }
+
+    // Generate all palindromic numbers up to max
+    private static List<Integer> generatePalindromes(int max) {
+        List<Integer> palindromes = new ArrayList<>();
+        for (int i = 1; i <= max; i++) {
+            if (isPalindrome(i)) {
+                palindromes.add(i);
+            }
+        }
+        return palindromes;
+    }
+
+    // Check if a number is a palindrome
+    private static boolean isPalindrome(int num) {
+        String s = Integer.toString(num);
+        int left = 0, right = s.length() - 1;
+        while (left < right) {
+            if (s.charAt(left++) != s.charAt(right--)) {
+                return false;
+            }
+        }
+        return true;
+     
+    }
+    
+}
