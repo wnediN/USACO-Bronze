@@ -1,0 +1,57 @@
+import java.util.*;
+
+public class MaximizingProductivity {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int N = scanner.nextInt();
+        int Q = scanner.nextInt();
+        
+        int[] closeTimes = new int[N];
+        int[] visitTimes = new int[N];
+        
+        for (int i = 0; i < N; i++) {
+            closeTimes[i] = scanner.nextInt();
+        }
+        
+        for (int i = 0; i < N; i++) {
+            visitTimes[i] = scanner.nextInt();
+        }
+        
+        List<Query> queries = new ArrayList<>();
+        for (int i = 0; i < Q; i++) {
+            int V = scanner.nextInt();
+            int S = scanner.nextInt();
+            queries.add(new Query(V, S));
+        }
+        
+        for (Query query : queries) {
+            int V = query.V;
+            int S = query.S;
+            int count = 0;
+            
+            for (int i = 0; i < N; i++) {
+                if (visitTimes[i] + S < closeTimes[i]) {
+                    count++;
+                }
+            }
+            
+            if (count >= V) {
+                System.out.println("YES");
+            } else {
+                System.out.println("NO");
+            }
+        }
+        
+        scanner.close();
+    }
+    
+    static class Query {
+        int V;
+        int S;
+        
+        Query(int V, int S) {
+            this.V = V;
+            this.S = S;
+        }
+    }
+}
