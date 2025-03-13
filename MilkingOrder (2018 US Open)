@@ -1,0 +1,83 @@
+//NOTE: pass, pass, pass, pass, pass, pass, e, e, pass, pass
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class MilkCows {
+
+	public static void main(String[] args) {
+		Scanner scan = new Scanner(System.in);
+		
+		int Ncows = scan.nextInt();
+		int Mheir = scan.nextInt();
+		int Kdemand = scan.nextInt();
+		
+		int[] M = new int[Mheir];
+		
+		for(int k=0; k<Mheir; k++) {
+			M[k]=scan.nextInt();
+		}
+		
+		int [] fOrder = new int[Ncows];
+		Arrays.fill(fOrder, -1); //fills -1 as unoccupied
+		
+		boolean[] usedNumbers = new boolean[Ncows + 1]; //used cows, from 1 through 6?
+		
+		for(int k=0; k<Kdemand; k++) {
+			int cow = scan.nextInt();//cow number
+			int pos = scan.nextInt()-1; //converts to 0based index
+			fOrder[pos]=cow; //sets index pos in fOrder to cow value
+			usedNumbers[cow]=true; //marks as used, the number itself in usedNumbers
+			
+		}
+		
+		scan.close();
+		
+		//place 1 as early as possible
+		for(int earliest = 0; earliest<Ncows; earliest++) {
+			if (fOrder[earliest] != -1) continue;
+			int[] tempOrder = Arrays.copyOf(fOrder, Ncows);
+            boolean[] tempUsed = Arrays.copyOf(usedNumbers, Ncows + 1);
+            tempOrder[earliest] = 1; // place cow 1
+            tempUsed[1] = true;
+            
+            int index = 0;
+            for (int i = 0; i < Ncows; i++) {
+                if (tempOrder[i] == -1) { // empty spot
+                    while (index < Mheir && tempUsed[M[index]]) {
+                        index++; // ekip used hierarchy cows
+                    }
+                    if (index < Mheir) { //places the Mheir based on their constraints
+                        tempOrder[i] = M[index];
+                        tempUsed[M[index]] = true;
+                        index++;
+                    }
+                }
+            }
+            //check validity
+            if(isValid(tempOrder, M)) {
+            	System.out.println(earliest + 1); // Convert back to 1-based index
+                return;
+            }
+		}
+		
+		
+
+		//for(int k=0; k<fOrder.length; k++) {
+		//	System.out.print(fOrder[k]+" ");
+		//}
+		
+		
+		
+	}
+
+	private static boolean isValid(int[] order, int[] hierarchy) {
+		int j = 0;
+        for (int cow : order) {
+            if (j < hierarchy.length && cow == hierarchy[j]) {
+                j++;
+            }
+        }
+        return j == hierarchy.length; // true if all hierarchy cows were placed correctly
+	}
+}
