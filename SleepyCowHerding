@@ -1,0 +1,48 @@
+import java.io.*;
+import java.util.Scanner;
+
+public class SleepyCowHerding {
+    public static void main(String[] args) throws IOException {
+        Scanner scan = new Scanner(new File("herding.in"));
+        PrintWriter out = new PrintWriter(new File("herding.out"));
+        
+        int b = scan.nextInt();
+        int e = scan.nextInt();
+        int m = scan.nextInt();
+        
+        int max = Math.max(b, Math.max(e, m));
+        int min = Math.min(b, Math.min(e, m));
+        int mid = 0;
+        
+        if (max != e && min != e) {
+            mid = e;
+        } else if (max != b && min != b) {
+            mid = b;
+        } else {
+            mid = m;
+        }
+        
+        int minmove = 0;
+        int maxmove = 0;
+        
+        if (max - mid == 1 && mid - min == 1) {
+            minmove = 0;
+        } else if (mid - min == 2 || max - mid == 2) {
+            minmove = 1;
+        } else {
+            minmove = 2;
+        }
+        
+        if ((max - mid) > (mid - min)) {
+            maxmove = (max - mid) - 1;
+        } else {
+            maxmove = (mid - min) - 1;
+        }
+        
+        out.println(minmove);
+        out.println(maxmove);
+        
+        scan.close();
+        out.close();
+    }
+}
