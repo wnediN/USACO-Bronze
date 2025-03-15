@@ -1,0 +1,29 @@
+
+import java.io.*;
+import java.util.*;
+
+public class SleepyCowSorting {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader("sleepy.in"));
+        PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter("sleepy.out")));
+        
+        int n = Integer.parseInt(br.readLine());
+        int[] initialOrder = new int[n];
+        
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < n; i++) {
+            initialOrder[i] = Integer.parseInt(st.nextToken());
+        }
+        br.close();
+        
+        // Find the longest sorted suffix from the end
+        int sortedIndex = n - 1;
+        while (sortedIndex > 0 && initialOrder[sortedIndex - 1] < initialOrder[sortedIndex]) {
+            sortedIndex--;
+        }
+        
+        // The number of steps needed is simply the number of unsorted elements before the sorted suffix
+        pw.println(sortedIndex);
+        pw.close();
+    }
+}
