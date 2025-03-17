@@ -1,0 +1,57 @@
+import java.io.*;
+import java.util.*;
+
+public class TamingTheHerd {
+    public static void main(String[] args) throws IOException {
+        
+        BufferedReader br = new BufferedReader(new FileReader("taming.in"));
+        PrintWriter pw = new PrintWriter(new FileWriter("taming.out"));
+
+        int n = Integer.parseInt(br.readLine());
+        int[] log = new int[n];
+
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < n; i++) {
+            log[i] = Integer.parseInt(st.nextToken());
+        }
+        br.close();
+
+        // first day must always be a breakout
+        if (log[0] > 0) {
+            pw.println("-1");
+            pw.close();
+            return;
+        }
+        log[0] = 0; 
+
+        for (int i = n - 1; i >= 0; i--) {
+            if (log[i] != -1) {
+                int expected = log[i];
+                for (int j = i - 1; j >= 0 && expected > 0; j--, expected--) {
+                    if (log[j] != -1 && log[j] != expected - 1) {
+                        pw.println("-1");
+                        pw.close();
+                        return;
+                    }
+                    log[j] = expected - 1;
+                }
+            }
+        }
+
+        int minBreakouts = 0, maxBreakouts = 0;
+
+        for (int i = 0; i < n; i++) {
+            if (log[i] == 0) {
+                minBreakouts++;
+            }
+            if (log[i] == -1) {
+                maxBreakouts++;
+            }
+        }
+
+        maxBreakouts += minBreakouts;
+
+        pw.println(minBreakouts + " " + maxBreakouts);
+        pw.close();
+    }
+}
